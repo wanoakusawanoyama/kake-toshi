@@ -1,0 +1,596 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+
+body {
+  font-family: "Arial Black", sans-serif;
+  background: radial-gradient(circle, #300000, #000);
+  color: #fff;
+  /* overflow: hidden; */
+  animation: bgFlash 0.5s infinite alternate;
+}
+
+@keyframes bgFlash {
+  from { background: radial-gradient(circle, #300000, #000); }
+  to   { background: radial-gradient(circle, #600000, #000); }
+}
+
+/* フラッシュ演出 */
+#flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+
+
+
+/* フレーム固定 */
+.frame {
+  width: 95%;
+  max-width: 500px;
+  height: 95vh;
+  margin: 1rem auto;
+  padding: 10px;
+  border: 8px solid gold; 
+  border-radius: 20px;
+  box-shadow:
+    0 0 20px gold,
+    inset 0 0 20px gold,
+    0 0 50px red;
+  background: linear-gradient(45deg, #300000, #000);
+}
+
+/* 全体レイアウト */
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.title {
+  background-image: url(logo.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center ;
+  height: 30%;
+  color: gold;
+  text-shadow: 0 0 20px red, 0 0 40px gold;
+}
+
+h1 {
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* 図柄 */
+.toshi img {
+  width: 250px;
+  margin: 1rem auto 0 ;
+  filter: drop-shadow(0 0 20px gold);
+}
+
+/* 🎯 演出ステージ */
+#stage {
+  width: 100%;
+  height: 35%; /* ←ここで制御🔥 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* ←はみ出し防止🔥 */
+}
+
+/* ハズレ・リーチ画像 */
+#stageImg {
+  position: absolute;
+  max-width: 40%;
+  max-height: 40%;
+  object-fit: contain;
+  z-index: 1;
+}
+
+/* 大当たり動画 */
+#videoLayer {
+  position: absolute;
+  top: 30%;
+  max-width: 500px;
+  margin: 0 auto;
+  z-index: 5;
+}
+#videoLayer video {
+  width: 100%;
+  height: 100%;
+}
+
+/* カットイン */
+#cutin {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-size: 40px;
+  color: gold;
+  background: rgba(0,0,0,0.8);
+  padding: 20px;
+  display: none;
+  z-index: 2;
+}
+
+#cutin .gun {
+  position: absolute;
+  top: -250%;
+  width: 300px;
+  animation: loopgun 3s linear infinite;
+}
+
+@keyframes loopgun {
+    from {
+        transform: translateX(180px);
+    }
+    to {
+        transform: translateX(-180px);
+    }
+}
+
+/* 連打ボタン */
+#pushBtn {
+  position: absolute;
+  bottom: 40%;
+  display: none;
+  width: 200px;;
+  z-index: 3;
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  background: gold;
+  filter: drop-shadow(0 0 20px red);
+  animation: pushGlow 0.5s infinite alternate;
+}
+
+@keyframes pushGlow {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
+
+#pushBtn .pbutton {
+  margin: 0 auto;
+  cursor: pointer;
+}
+
+
+/* これは？　ここから*/
+.hit {
+  color: gold;
+  text-shadow: 0 0 20px gold, 0 0 40px white;
+  animation: flash 0.3s infinite;
+}
+
+.miss {
+  color: #888;
+}
+
+@keyframes flash {
+  50% { opacity: 0; }
+}
+/* これは？　ここまで*/
+
+
+/* 画面揺れ */
+.shake {
+  animation: shake 0.3s infinite;
+}
+
+@keyframes shake {
+  0% { transform: translate(2px, 2px); }
+  25% { transform: translate(-2px, -2px); }
+  50% { transform: translate(2px, -2px); }
+  75% { transform: translate(-2px, 2px); }
+  100% { transform: translate(0, 0); }
+}
+
+
+
+/* メッセージ */
+.message {
+  text-align: center;
+  font-size: 2rem;
+  margin: 0 auto;
+  color: #aaa;
+  animation: blink 0.3s infinite;
+  text-shadow: 0 0 10px red, 0 0 20px gold;
+  z-index: 7;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* ランク別カラー */
+.message.normal { color: #aaa; }
+.message.chance { color: cyan; text-shadow: 0 0 10px cyan; }
+.message.hot { color: red; text-shadow: 0 0 20px red; }
+.message.guarantee { color: gold; text-shadow: 0 0 20px gold; }
+
+
+
+.startstop {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+.start-btn {
+  margin: 1rem 0;
+  font-size: 1.5rem;
+  padding: 15px 40px;
+  background: linear-gradient(45deg, gold, red);
+  border: none;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 20px gold;
+  transition: 0.2s;
+}
+
+.start-btn:hover {
+  transform: scale(1.1);
+}
+
+.stop-btn {
+  width: 90px;
+  background-color: black;
+  cursor: pointer;
+}
+
+
+
+.spec {
+  padding: 80px 20px;
+  background: linear-gradient(to bottom, #000000, #2b0000);
+  color: #fff;
+  text-align: center;
+}
+
+.spec-title {
+  font-size: 36px;
+  margin-bottom: 40px;
+  color: gold;
+  text-shadow: 0 0 10px gold, 0 0 20px red;
+  letter-spacing: 3px;
+}
+
+.spec-table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  width: 90%;
+  max-width: 600px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid gold;
+  box-shadow: 0 0 20px gold;
+}
+
+.spec-table th,
+.spec-table td {
+  padding: 15px;
+  border: 1px solid gold;
+}
+
+.spec-table th {
+  width: 40%;
+  background: linear-gradient(to right, #550000, #aa0000);
+  color: #fff;
+  text-shadow: 0 0 5px red;
+}
+
+.spec-table td {
+  background: rgba(255, 0, 0, 0.1);
+  font-weight: bold;
+}
+
+/* ✨ホバーで光る（地味に楽しい） */
+.spec-table tr:hover {
+  background: rgba(255, 215, 0, 0.2);
+  transition: 0.3s;
+}
+
+@keyframes glow {
+  0% { text-shadow: 0 0 5px gold; }
+  50% { text-shadow: 0 0 20px red, 0 0 30px gold; }
+  100% { text-shadow: 0 0 5px gold; }
+}
+
+.spec-title {
+  animation: glow 2s infinite;
+}
+
+
+.effects {
+  padding: 80px 20px;
+  background: linear-gradient(#000, #200000);
+  color: white;
+  text-align: center;
+}
+
+.effects-title {
+  font-size: 32px;
+  margin: 10rem 0 20px;
+  color: gold;
+  text-shadow: 0 0 10px red;
+}
+
+.effects-group {
+  display: grid;
+  grid-template-columns: 1fr; /* ←1列固定 */
+  gap: 30px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.effect-card {
+  background: rgba(0,0,0,0.85);
+  border: 3px solid gold;
+  box-shadow: 0 0 20px gold;
+  padding: 20px;
+}
+
+.effect-card img,
+.effect-card video {
+  width: 100%;
+  height: 320px; /* ←大きく */
+  object-fit: contain;
+  /* border: 2px solid red; */
+}
+
+.effect-card p {
+  font-size: 18px;
+  margin-top: 15px;
+  color: gold;
+  text-shadow: 0 0 5px red;
+}
+
+/* 群 */
+.gun {
+  width: 100%;
+  height: 320px;
+  overflow: hidden;
+}
+
+.gun img {
+  width: 150%;
+}
+
+/* 斜め */
+.gun-tate {
+  background-image: url(logo.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.gun-tate img {
+  animation: loopgun_tate 4s linear infinite;
+}
+
+@keyframes loopgun_tate {
+  from {
+    transform: translate(-200px, -200px); /* 左上 */
+  }
+  to {
+    transform: translate(200px, 200px);   /* 右下 */
+  }
+}
+
+/* くるくるトシ */
+.super-star {
+  position: relative;
+  width: 200px;
+  height: 400px;
+  margin: 0 auto;
+  background-color: red;
+  padding-top: 10px;
+}
+
+.toshi-turn {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  animation: toshiTurn 0.8s ease-in-out infinite;
+  transform-style: preserve-3d; /* ←重要 */
+}
+
+@keyframes toshiTurn {
+  0%   { transform: translateX(-50%) rotateY(0deg); }
+  50%  { transform: translateX(-50%) rotateY(180deg); }
+  100% { transform: translateX(-50%) rotateY(360deg); }
+}
+
+.effect-card .ball {
+  position: absolute;
+  bottom: -30%;
+  width: 70px;
+  left: 33%;
+}
+
+
+
+/* 法則 */
+.rules {
+  max-width: 500px;
+  margin: 30px auto;
+  text-align: left;
+  line-height: 2;
+  background: rgba(0,0,0,0.8);
+  border: 2px solid gold;
+  padding: 20px;
+}
+
+
+
+.goods {
+  padding: 80px 20px;
+  background: linear-gradient(#100000, #000);
+  text-align: center;
+  color: white;
+}
+
+.goods-title {
+  font-size: 36px;
+  color: gold;
+  margin-bottom: 40px;
+  text-shadow: 0 0 10px red, 0 0 20px gold;
+}
+
+.goods-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.goods-card {
+  background: rgba(0,0,0,0.85);
+  border: 3px solid gold;
+  box-shadow: 0 0 20px gold;
+  padding: 20px;
+  transition: 0.3s;
+}
+
+.goods-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px red, 0 0 60px gold;
+}
+
+.goods-card img {
+  width: 100%;
+  height: 330px;
+  object-fit: contain;
+  /* border: 2px solid red; */
+}
+
+.goods-card h3 {
+  font-size: 20px;
+  margin: 15px 0;
+  color: gold;
+}
+
+.price {
+  font-size: 18px;
+  color: #fff;
+  background: red;
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px red;
+}
+
+
+.ending {
+  padding: 100px 20px;
+  background: radial-gradient(circle, #200000, #000);
+  text-align: center;
+  color: white;
+}
+
+/* テキスト */
+.ending-text p {
+  font-size: 20px;
+  margin: 10px 0;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+/* 1行ずつ遅れて出す */
+.ending-text p:nth-child(1) { animation-delay: 0.5s; }
+.ending-text p:nth-child(2) { animation-delay: 1.5s; }
+.ending-text p:nth-child(3) { animation-delay: 2.5s; }
+.ending-text p:nth-child(4) { animation-delay: 3.5s; }
+.ending-text p:nth-child(5) { animation-delay: 4.5s; }
+
+/* ボタン */
+#againBtn {
+  margin-top: 30px;
+  font-size: 18px;
+  padding: 10px 20px;
+  background: gold;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 10px gold;
+  animation: fadeIn 1s forwards;
+  animation-delay: 5.5s;
+  opacity: 0;
+}
+
+
+/* 最後のメッセージ */
+/* 覚醒前（今のまま） */
+.ending {
+  padding: 100px 20px;
+  background: radial-gradient(circle, #200000, #000);
+  text-align: center;
+  color: white;
+  transition: 1s; /* ←なめらか変化 */
+}
+
+/* 覚醒後🔥 */
+.ending.gold {
+  background: radial-gradient(circle, gold, #f96b6b);
+  box-shadow: inset 0 0 100px gold;
+}
+
+.final-message {
+  font-size: 32px;
+  font-weight: bold;
+  color: red;
+  margin-top: 50px;
+  opacity: 0;
+  text-shadow: 0 0 20px gold, 0 0 40px red;
+}
+
+/* 表示されたとき */
+.final-message.show {
+  opacity: 1;
+  animation: flash 0.5s infinite alternate;
+}
+
+/* フェード */
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* 点滅 */
+@keyframes flash {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
+/* ===== FOOTER ===== */
+footer {
+  font-size: 1rem;
+  padding: 2rem;
+  background: #aaa;
+  text-align: center;
+}
+
