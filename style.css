@@ -18,7 +18,6 @@ body {
   font-family: "Arial Black", sans-serif;
   background: radial-gradient(circle, #300000, #000);
   color: #fff;
-  /* overflow: hidden; */
   animation: bgFlash 0.5s infinite alternate;
 }
 
@@ -45,9 +44,8 @@ body {
 
 /* フレーム固定 */
 .frame {
-  width: 95%;
-  max-width: 500px;
-  height: 95vh;
+  max-width: 800px;
+  height: 90vh;
   margin: 1rem auto;
   padding: 10px;
   border: 8px solid gold; 
@@ -57,6 +55,12 @@ body {
     inset 0 0 20px gold,
     0 0 50px red;
   background: linear-gradient(45deg, #300000, #000);
+  animation: frameGlow 1s infinite alternate;
+}
+
+@keyframes frameGlow {
+  from { box-shadow: 0 0 20px gold; }
+  to { box-shadow: 0 0 40px red, 0 0 60px gold; }
 }
 
 /* 全体レイアウト */
@@ -79,21 +83,22 @@ body {
 }
 
 h1 {
-  font-size: 1rem;
+  margin-top: 2rem;
+  font-size: 2rem;
   text-align: center;
 }
 
 /* 図柄 */
 .toshi img {
-  width: 250px;
-  margin: 1rem auto 0 ;
+  max-width: 600px;
+  margin: 0 auto ;
   filter: drop-shadow(0 0 20px gold);
 }
 
 /* 🎯 演出ステージ */
 #stage {
   width: 100%;
-  height: 35%; /* ←ここで制御🔥 */
+  height: 40%; /* ←ここで制御🔥 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -103,8 +108,8 @@ h1 {
 /* ハズレ・リーチ画像 */
 #stageImg {
   position: absolute;
-  max-width: 40%;
-  max-height: 40%;
+  max-width: 60%;
+  max-height: 60%;
   object-fit: contain;
   z-index: 1;
 }
@@ -113,13 +118,19 @@ h1 {
 #videoLayer {
   position: absolute;
   top: 30%;
-  max-width: 500px;
+  max-width: 800px;
   margin: 0 auto;
   z-index: 5;
 }
 #videoLayer video {
   width: 100%;
   height: 100%;
+  opacity: 0;
+  animation: videoFade 0.3s forwards;
+}
+
+@keyframes videoFade {
+  to { opacity: 1; }
 }
 
 /* カットイン */
@@ -127,7 +138,7 @@ h1 {
   position: absolute;
   width: 100%;
   text-align: center;
-  font-size: 40px;
+  font-size: 3rem;
   color: gold;
   background: rgba(0,0,0,0.8);
   padding: 20px;
@@ -138,16 +149,16 @@ h1 {
 #cutin .gun {
   position: absolute;
   top: -250%;
-  width: 300px;
+  max-width: 500px;
   animation: loopgun 3s linear infinite;
 }
 
 @keyframes loopgun {
     from {
-        transform: translateX(180px);
+        transform: translateX(300px);
     }
     to {
-        transform: translateX(-180px);
+        transform: translateX(-300px);
     }
 }
 
@@ -156,10 +167,10 @@ h1 {
   position: absolute;
   bottom: 40%;
   display: none;
-  width: 200px;;
+  max-width: 500px;;
   z-index: 3;
   margin-top: 1rem;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bold;
   padding: 1rem 2rem;
   background: gold;
@@ -213,7 +224,7 @@ h1 {
 /* メッセージ */
 .message {
   text-align: center;
-  font-size: 2rem;
+  font-size: 3rem;
   margin: 0 auto;
   color: #aaa;
   animation: blink 0.3s infinite;
@@ -237,13 +248,12 @@ h1 {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  max-width: 80%;
   margin: 0 auto;
 }
 
 .start-btn {
   margin: 1rem 0;
-  font-size: 1.5rem;
+  font-size: 2rem;
   padding: 15px 40px;
   background: linear-gradient(45deg, gold, red);
   border: none;
@@ -259,11 +269,14 @@ h1 {
 }
 
 .stop-btn {
-  width: 90px;
+  width: 100px;
   background-color: black;
   cursor: pointer;
 }
 
+section {
+  box-shadow: 0 0 20px rgba(255,0,0,0.3);
+}
 
 
 .spec {
@@ -285,7 +298,8 @@ h1 {
   margin: 0 auto;
   border-collapse: collapse;
   width: 90%;
-  max-width: 600px;
+  max-width: 800px;
+  font-size: 1.2rem;
   background: rgba(0, 0, 0, 0.8);
   border: 2px solid gold;
   box-shadow: 0 0 20px gold;
@@ -334,8 +348,8 @@ h1 {
 }
 
 .effects-title {
-  font-size: 32px;
-  margin: 10rem 0 20px;
+  font-size: 36px;
+  margin: 10rem 0 40px;
   color: gold;
   text-shadow: 0 0 10px red;
 }
@@ -343,8 +357,8 @@ h1 {
 .effects-group {
   display: grid;
   grid-template-columns: 1fr; /* ←1列固定 */
-  gap: 30px;
-  max-width: 600px;
+  gap: 3rem;
+  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -352,19 +366,27 @@ h1 {
   background: rgba(0,0,0,0.85);
   border: 3px solid gold;
   box-shadow: 0 0 20px gold;
-  padding: 20px;
+  padding: 30px 20px 20px 20px;
 }
 
 .effect-card img,
 .effect-card video {
   width: 100%;
-  height: 320px; /* ←大きく */
+  height: 400px; /* ←大きく */
   object-fit: contain;
-  /* border: 2px solid red; */
+}
+
+.effect-card video {
+  opacity: 0;
+  animation: videoFade 0.3s forwards;
+}
+
+@keyframes videoFade {
+  to { opacity: 1; }
 }
 
 .effect-card p {
-  font-size: 18px;
+  font-size: 1.5rem;
   margin-top: 15px;
   color: gold;
   text-shadow: 0 0 5px red;
@@ -373,7 +395,7 @@ h1 {
 /* 群 */
 .gun {
   width: 100%;
-  height: 320px;
+  height: 400px;
   overflow: hidden;
 }
 
@@ -405,10 +427,10 @@ h1 {
 .super-star {
   position: relative;
   width: 200px;
-  height: 400px;
+  height: 490px;
   margin: 0 auto;
   background-color: red;
-  padding-top: 10px;
+  padding-top: 20px;
 }
 
 .toshi-turn {
@@ -437,13 +459,14 @@ h1 {
 
 /* 法則 */
 .rules {
-  max-width: 500px;
+  max-width: 600px;
   margin: 30px auto;
   text-align: left;
   line-height: 2;
   background: rgba(0,0,0,0.8);
   border: 2px solid gold;
-  padding: 20px;
+  padding: 20px 20px 20px 40px;
+  font-size: 1.2rem;
 }
 
 
@@ -465,8 +488,8 @@ h1 {
 .goods-list {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 40px;
-  max-width: 600px;
+  gap: 3rem;
+  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -485,9 +508,8 @@ h1 {
 
 .goods-card img {
   width: 100%;
-  height: 330px;
+  height: 400px;
   object-fit: contain;
-  /* border: 2px solid red; */
 }
 
 .goods-card h3 {
@@ -497,7 +519,7 @@ h1 {
 }
 
 .price {
-  font-size: 18px;
+  font-size: 20px;
   color: #fff;
   background: red;
   display: inline-block;

@@ -259,7 +259,7 @@ function changeImage(rank) {
   img.src = images[rank];
 
   if (rank === "hot") {
-  img.style.transform = "scale(0.7)";
+  img.style.transform = "scale(3)";
 } else {
   img.style.transform = "scale(1)";
 }
